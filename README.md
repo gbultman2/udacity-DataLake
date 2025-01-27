@@ -1,12 +1,16 @@
 # Deliverables: 
 
-Note: I believe the rubric is incorrect for count of step_trainer_trusted: 14460 rows when following the stand out suggestions.  There are fewer rows in customer_curated.  So, it stands to reason that if there are fewer customers, there will be fewer rows in the step trainer trusted when we have to join on customer_curated.  I have 13,920.
+Notes: 
+
+1. I believe the rubric is incorrect for count of step_trainer_trusted: 14460 rows when following the stand out suggestions.  There are fewer rows in customer_curated.  So, it stands to reason that if there are fewer customers, there will be fewer rows in the step trainer trusted when we have to join on customer_curated.  I have 13,920.
+2. I used SQL statements rather than inner join nodes for `machine_learning_curated` and `step_trainer_landing_to_trusted` glue jobs.  
 
 ## Python Scripts
 
 - [customer_landing_to_trusted.py](/src/customer_landing_to_trusted.py)
 - [accelerometer_landing_to_trusted.py](/src/accelerometer_landing_to_trusted.py)
 - [step_trainer_trusted.py](/src/step_trainer_landing_to_trusted.py)
+- [machine_learning_curated.py](/src/machine_learning_curated.py)
 
 ## Landing Zone
   
