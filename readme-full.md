@@ -1,7 +1,8 @@
 **DO NOT REVIEW**
+
 The purpose of this readme is to provide a look at how I approached this project and to have it graded by Udacity.
 
-Step 1.  Suss out the requirements and develop a plan. 
+# Step 1.  Suss out the requirements and develop a plan. 
 
 I like to follow the mantra "code last."  Code and any tools used should just be an artifact of the design process. Since the requirements are pretty stringent in this project, I'll follow them as listed even though improvements can be made.  I will list any recommendations in a later section.  
 
@@ -68,8 +69,9 @@ Plan
 			- must have a node that inner joins customer_trusted with acclerometer_landing by email. Produced table must only have accelerometer data
 		c. step_trainer_trusted.py (inconsistent naming is in the requirements)
 			- must have a node that inner joins the step_trainer_landing data with customer_curated data by serial numbers
+    			- since there are multiple serial numbers, we should probably do a subquery instead of an inner join.
 			(this step may take about 8 minutes to run)  -- note you'll have to run this step later but it's here to show consistency
-6.  Query the trusted tables using Athena and provide screenshots.
+7.  Query the trusted tables using Athena and provide screenshots.
 	a. customer_trusted
 		i. table row count (482)
 		ii. row count where shareWithResearchAsOfDate is blank (0)
@@ -77,13 +79,13 @@ Plan
 		- table row count (32205)
 	c. step_trainer_trusted
 		- table row count (14460)
-7.  Curate the data with glue jobs and create curated zone glue tables. 
+8.  Curate the data with glue jobs and create curated zone glue tables. 
 	a. customer_trusted_to_curated.py
 		i. must have a node that inner joins customer_trusted with accelerometer_trusted by email
 		ii. table must only have columns from the customer table
 	b. machine_learning_curated.py (inconsistent naming is in the requirements)
 		- must have a node that inner joins step_trainer_trusted data with the customer_curated data by timestamp
-8. Query the curated tables using Athena and provide screenshots
+9. Query the curated tables using Athena and provide screenshots
 	a. customer_curated 
 		- table row count (464)
 	b. machine_learning_curated
@@ -175,7 +177,6 @@ Expected row counts
     accelerometer
         - landing 81273
         - trusted 32025
-        - curated 
     step_trainer
         -landing 28680
         -trusted 14460 - 13920?
