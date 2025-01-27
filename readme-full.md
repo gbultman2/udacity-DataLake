@@ -9,20 +9,26 @@ I like to follow the mantra "code last."  Code and any tools used should just be
 **Requirements Analysis**
 
 We're given the data for the accelerometer and the mobile application in the project.  
+- [accelerometer data](/data/accelerometer/landing)
+- [customer data](/data/customer/landing)
+- [step trainer data](/data/step_trainer/landing)
 
-Looks like we need to just copy local files for the data into the s3 bucket into a landing zone then create other folders in S3 with glue jobs.  I've outlined the required S3 bucket path structure and glue table names, in parentheses, below:
+The specifications for this project require that there be a certain number of records in each zone.  Therefore, we won't do any type of quality checks on the incoming data.  In a real world application, we would profile the information based on the metadata provided.  The project does not give any metadata.  So we'll have to do our best to figure out how to specify any tables in Glue.
 
+The final structure of the S3 bucket should look something like the following.  The data table names are in parentheses.
+```
 Customer
-	| Landing (customer_landing)
-	| Trusted (customer_trusted)
-	| Curated (customers_curated)
+├── Landing (customer_landing)
+├── Trusted (customer_trusted)
+└── Curated (customers_curated)
 Accelerometer
-	| Landing (accelerometer_landing)
-	| Trusted (accelerometer_trusted)
+├── Landing (accelerometer_landing)
+└── Trusted (accelerometer_trusted)
 Step Trainer
-	| Landing (step_trainer_landing)
-	| Trusted (step_trainer_trusted)
-	| Curated (machine_learning_curated)
+├── Landing (step_trainer_landing)
+├── Trusted (step_trainer_trusted)
+└── Curated (machine_learning_curated)
+```
 	
 In the landing zones, we'll just need to copy project data over to the S3 buckets.   The trusted are as follows:
 
@@ -30,7 +36,11 @@ In the landing zones, we'll just need to copy project data over to the S3 bucket
 - Accelerometer - Only readings from customers who agreed to share their data
 - Step Trainer - only data from customers who agreed to share their data
 
-The specifications for this project require that there be a certain number of records in each zone.  Therefore, we won't do any type of quality checks on the incoming data.  In a real world application, we would profile the information based on the metadata provided.
+We could proceed in a couple of different ways. 
+1. Create the customer trusted, then join that to the accelerometer landing.
+2. Join the customer landing and the accelerometer landing and just use filtering.
+
+Since the project rubric calls for method 1, that's what we'll use.
 
 Data scientists discovered a data quality issue with customer data.  The serial number in the customer table is reused.  There was a defect in the fulfillment website.  The data in step trainer records is correct though. I'm not really sure why the data scientists are accessing the raw data if we're to create curated data for them. Nonetheless we need to fix the issue in the data lake.  The website needs fixed as well, but that is a task for others.  Data profiling would have identified this issue before getting downstream.  
 
@@ -54,7 +64,7 @@ Plan
 	a. customer_landing (customer_landing.sql)
 	b. accelerometer_landing (accelerometer_landing.sql)
 	c. step_trainer_landing (step_trainer_landing.sql)
-4.  Query the tables using Athena
+5.  Query the tables using Athena
 	a. customer_landing
 		i. table row count (956)
 		ii. show rows with blank shareWithResearchAsOfDate
@@ -62,7 +72,7 @@ Plan
 		- table row count (81273)
 	c. step_trainer_landing
 		- table row count (28680)
-5.  Sanitize the data with glue jobs and create trusted zone glue tables.  This must be done using Glue Studio and it must dynamically update a glue table schema from the JSON data. (To do this, set the Create a table in the Data Catalog and, on subsequent runs, update the schema and add new partitions option to True.)
+6.  Sanitize the data with glue jobs and create trusted zone glue tables.  This must be done using Glue Studio and it must dynamically update a glue table schema from the JSON data. (To do this, set the Create a table in the Data Catalog and, on subsequent runs, update the schema and add new partitions option to True.)
 		a. customer_landing_to_trusted.py
 			- must have a node that drops rows that don't have data in the sharedWithResearchAsOfDate column
 		b. accelerometer_landing_to_trusted.py
