@@ -8,7 +8,7 @@ Notes:
 ## Python Scripts
 
 - [customer_landing_to_trusted.py](/src/customer_landing_to_trusted.py)
-- [customer_trusted_to_curated.py(/src/customer_trusted_to_curated.py)
+- [customer_trusted_to_curated.py](/src/customer_trusted_to_curated.py)
 - [accelerometer_landing_to_trusted.py](/src/accelerometer_landing_to_trusted.py)
 - [step_trainer_trusted.py](/src/step_trainer_landing_to_trusted.py)
 - [machine_learning_curated.py](/src/machine_learning_curated.py)
